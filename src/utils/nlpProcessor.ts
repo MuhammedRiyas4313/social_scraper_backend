@@ -1,8 +1,14 @@
 import natural from "natural";
+import vader from 'vader-sentiment';
+
+interface SentimentResult {
+  score: number;
+  sentiment: "positive" | "neutral" | "negative";
+}
+
 const stopwords = require("natural/lib/natural/util/stopwords").words;
 
 const tokenizer = new natural.WordTokenizer();
-const { SentimentAnalyzer, PorterStemmer } = natural;
 
 // Types
 interface Keyword {
@@ -31,9 +37,6 @@ interface SocialPost {
   text?: string;
   title?: string;
 }
-
-// Initialize sentiment analyzer
-const analyzer = new SentimentAnalyzer("English", PorterStemmer, "afinn");
 
 export const analyzeText = async (
   posts: SocialPost[]
@@ -90,16 +93,24 @@ function extractHashtags(text: string): Hashtag[] {
     .map(([tag, count]) => ({ tag, count }));
 }
 
-function analyzeSentiment(text: string): SentimentResult {
-  if (!text) return { score: 0, sentiment: "neutral" };
+ function analyzeSentiment(text: string | undefined | null): SentimentResult {
+  // Handle null/undefined or non-string input
+  if (typeof text !== 'string' || !text.trim()) {
+    return { score: 0, sentiment: "neutral" };
+  }
+  
+  try {
+    const result = vader.SentimentIntensityAnalyzer.polarity_scores(text);
+    const score = result.compound;
+    
+    let sentiment: "positive" | "neutral" | "negative";
+    if (score > 0.05) sentiment = "positive";
+    else if (score < -0.05) sentiment = "negative";
+    else sentiment = "neutral";
 
-  const tokens = tokenizer.tokenize(text) || [];
-  const score = analyzer.getSentiment(tokens);
-
-  let sentiment: "positive" | "neutral" | "negative";
-  if (score > 0.2) sentiment = "positive";
-  else if (score < -0.2) sentiment = "negative";
-  else sentiment = "neutral";
-
-  return { score, sentiment };
+    return { score, sentiment };
+  } catch (error) {
+    console.error('Sentiment analysis failed:', error);
+    return { score: 0, sentiment: "neutral" };
+  }
 }
