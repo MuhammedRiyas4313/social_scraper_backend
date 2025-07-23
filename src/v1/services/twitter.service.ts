@@ -22,7 +22,7 @@ export const scrapeTwitter = async (
   try {
     // Check cache first
     const cached = await getCachedResult(cacheKey);
-    if (cached) return cached?.data;
+    if (cached) return cached;
 
     // Initialize client
     // const client = new TwitterApi(CONFIG.TWITTER_BEARER_TOKEN);

@@ -8,7 +8,7 @@ export const scrapeReddit = async (keyword: string, timeframe: string) => {
   try {
     // Check cache first
     const cached = await getCachedResult(cacheKey);
-    if (cached) return cached?.data;
+    if (cached) return cached;
 
     // 1. First get an access token
     const authResponse = await axios.post(

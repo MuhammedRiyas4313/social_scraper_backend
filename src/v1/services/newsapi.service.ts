@@ -17,7 +17,7 @@ export const scrapeNews = async (keyword: any, timeframe: any) => {
     const cacheKey = `twitter:${keyword}:${timeframe}`;
 
     const cached = await getCachedResult(cacheKey);
-    if (cached) return cached?.data;
+    if (cached) return cached;
 
     const fromDate = getFromDate(timeframe);
     const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(

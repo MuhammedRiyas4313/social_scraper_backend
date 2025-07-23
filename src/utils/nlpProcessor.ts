@@ -41,7 +41,6 @@ interface SocialPost {
 export const analyzeText = async (
   posts: SocialPost[]
 ): Promise<AnalysisResult> => {
-  console.log(posts, 'POSTS')
   const allText = posts
     .map((p) => p.text || p.title || p.content || "")
     .filter(Boolean)

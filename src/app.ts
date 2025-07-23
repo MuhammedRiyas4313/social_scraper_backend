@@ -2,26 +2,16 @@ import createError from "http-errors";
 import express from "express";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
-import mongoose from "mongoose";
 import cors from "cors";
 import v1Router from "./v1/router.v1";
 
 import { errorHandler } from "./middlewares/errorHandler.middleware";
-import { CONFIG } from "common/config.common";
+import { connectRedis } from "utils/cache";
 
 const app = express();
 
-/**
- * @description mongo connection and seeder
- */
 
-mongoose
-  .connect(CONFIG.MONGOURI)
-  .then(() => console.log("DB Connected to ", CONFIG.MONGOURI))
-  .catch((err) => console.error(err));
-
-mongoose.set("debug", true);
-mongoose.set("allowDiskUse", true);
+connectRedis()
 
 /**
  *@description express configuration

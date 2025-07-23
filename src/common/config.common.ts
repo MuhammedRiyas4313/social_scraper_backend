@@ -17,4 +17,8 @@ export const CONFIG = parseEnv(process.env, {
   TWITTER_ACCES_TOKEN_SECRET: z.string(),
   REDDIT_CLIENT_ID: z.string(),
   REDDIT_CLIENT_SECRET: z.string(),
+  REDIS_HOST: z.string(),
+  REDIS_USERNAME: z.string(),
+  REDIS_PORT: z.number(),
+  REDIS_PASSWORD: z.string(),
 });
