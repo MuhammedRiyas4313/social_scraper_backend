@@ -7,8 +7,6 @@ dotenv.config({ path: ".env.local", override: true });
 export const CONFIG = parseEnv(process.env, {
   // URL: z.string(),
   PORT: port().default(3000),
-  MONGOURI: z.string(),
-  JWT_ACCESS_TOKEN_SECRET: z.string(),
   NEWS_API_KEY: z.string(),
   TWITTER_API_KEY: z.string(),
   TWITTER_API_KEY_SECRET: z.string(),
